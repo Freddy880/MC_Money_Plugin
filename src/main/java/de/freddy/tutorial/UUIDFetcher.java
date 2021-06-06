@@ -26,6 +26,7 @@ SOFTWARE.
 From Github: https://github.com/ThexXTURBOXx/McUUIDFetcher
 (Latest acess: 06.06.2021)
  */
+
 package de.freddy.tutorial;//package your.package.here;
 
 import java.io.BufferedReader;
@@ -35,15 +36,6 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
-/*
-Uncomment this if you want the helper method for BungeeCord:
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-*/
-
-/*
-Uncomment this if you want the helper method for Bukkit/Spigot:
-import org.bukkit.entity.Player;
-*/
 
 /**
  * Helper-class for getting UUIDs of players.
