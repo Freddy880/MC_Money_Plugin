@@ -1,6 +1,7 @@
 package de.freddy.tutorial.commands;
 
 import de.freddy.tutorial.utils.FileConfig;
+import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,69 +39,95 @@ public class KontoSystem implements CommandExecutor {
         // konto zu konto überweisung
         // Kontostnd abfrage
 
-        if(args[0].equals("add")){ //Argument zum hinzufügen eines Kontos-----------------------------------------------
-            String kontoname = args[1];
-            //Existiert das Konto? Wenn ja nicht verändern
-            if(konten.contains(path + kontoname)){
-                player.sendMessage("Das Konto konnte nicht erstellt werden, da dieses bereits existiert!");
-                return true;
-            }
-            //erstellung der Grundlagen des Kontos
-            konten.set(path + kontoname + ".besitzer", player.getUniqueId().toString()); //Besitzer
-            zugriff.add(player.getUniqueId().toString());   //Zugriff
-            konten.set(path + kontoname + ".zugriff", zugriff);
-            konten.set(path + kontoname + ".kontostand", 0);    //Kontostand
-            konten.saveConfig();
-            player.sendMessage(PREFIX + "Das Konto wurde erfolgreich erstellt");    //Massege
-        }else if(args[0].equals("abheben")){    //ABHEBEN vom Konto-----------------------------------------------------
-            String konto = args[1];
-            //exestiert Konto?
-            if(!konten.contains(path + konto)){
-                player.sendMessage(PREFIX + "Das Konto existiert nicht. Wenn es exestieren müsste bitte einen Admin " +
-                        "kontaktieren");
-                return true;
-            }
-            int menge = Integer.parseInt(args[2]);
-            int kontostand = kontoGetMoney(konto);
-            List<String> berrechtigung = konten.getStringList(path + konto + ".zugriff");
-            //Kontostand hoch genug zum abheben?
-            if(menge > kontostand){
-                player.sendMessage(PREFIX + "Der Kontostand beträgt nur" + kontostand + "$FP. Abheben nicht möglich!");
-                return true;
-            }else if(!berrechtigung.contains(player.getUniqueId().toString())){
-                player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
-                return true;
-            }
-            System.out.println(menge +" " + player.getUniqueId().toString());
-            kontoRemoveMoney(konto,menge);
-            MoneySystem.addMoney(player.getUniqueId().toString(),menge);
-            player.sendMessage(PREFIX + "Das abheben von " + menge + "$FP war erfolgreich! Das konto hat noch " +
-                    kontoGetMoney(konto) + "$FP.");
-            return true;
-        }else if(args[0].equals("aufladen")) {  //Aufladen des Kontos --------------------------------------------------
-            String konto = args[1];
-            int ammount = Integer.parseInt(args[2]);
-            if(!konten.contains(path + konto)) { //Wenn das Konto nicht exestiert
-                player.sendMessage(PREFIX + "Das Konto existiert nicht.");
-                return true;
-            }else if(MoneySystem.getMoney(player.getUniqueId().toString()) < ammount){  //Wenn der Spieler nicht genug Geld hat
-                player.sendMessage(PREFIX + "Du hast nicht genug Geld um das Konto aufzuladen. Dein Kontostand beträgt nur " +
-                        MoneySystem.getMoney(player.getUniqueId().toString() + "$FP"));
-                return true;
-            }else
-                //Wenn der Spieler keine Berrechtigung hat
-                if(!konten.getStringList(path + konto + ".zugriff").contains(player.getUniqueId().toString())) {
-                player.sendMessage(PREFIX + "Du hast keine Berrechtigung das Konto aufzuladen. Bitte nutze \"überweisen\"");
-                return true;
-            }else{
-                    kontoAddMoney(konto,ammount);
-                    MoneySystem.removeMoney(player.getUniqueId().toString(),ammount);
-                    player.sendMessage(PREFIX + "Das Aufladen des Kontos " + konto + " in höhe von " + ammount + "$FP" +
-                            " war erfolgreich!");
+        switch (args[0]) {
+            case "add":  //Argument zum hinzufügen eines Kontos-----------------------------------------------
+                String kontoname = args[1];
+                //Existiert das Konto? Wenn ja nicht verändern
+                if (konten.contains(path + kontoname)) {
+                    player.sendMessage("Das Konto konnte nicht erstellt werden, da dieses bereits existiert!");
+                    return true;
                 }
+                //erstellung der Grundlagen des Kontos
+                konten.set(path + kontoname + ".besitzer", player.getUniqueId().toString()); //Besitzer
+
+                zugriff.add(player.getUniqueId().toString());   //Zugriff
+
+                konten.set(path + kontoname + ".zugriff", zugriff);
+                konten.set(path + kontoname + ".kontostand", 0);    //Kontostand
+
+                konten.saveConfig();
+                player.sendMessage(PREFIX + "Das Konto wurde erfolgreich erstellt");    //Massege
+
+                break;
+            case "abheben": {    //ABHEBEN vom Konto-----------------------------------------------------
+                String konto = args[1];
+                //exestiert Konto?
+                if (!konten.contains(path + konto)) {
+                    player.sendMessage(PREFIX + "Das Konto existiert nicht. Wenn es exestieren müsste bitte einen Admin " +
+                            "kontaktieren");
+                    return true;
+                }
+                int menge = Integer.parseInt(args[2]);
+                int kontostand = kontoGetMoney(konto);
+                List<String> berrechtigung = konten.getStringList(path + konto + ".zugriff");
+                //Kontostand hoch genug zum abheben?
+                if (menge > kontostand) {
+                    player.sendMessage(PREFIX + "Der Kontostand beträgt nur" + kontostand + "$FP. Abheben nicht möglich!");
+                    return true;
+                } else if (!berrechtigung.contains(player.getUniqueId().toString())) {
+                    player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
+                    return true;
+                }
+                System.out.println(menge + " " + player.getUniqueId().toString());
+                kontoRemoveMoney(konto, menge);
+                MoneySystem.addMoney(player.getUniqueId().toString(), menge);
+                player.sendMessage(PREFIX + "Das abheben von " + menge + "$FP war erfolgreich! Das konto hat noch " +
+                        kontoGetMoney(konto) + "$FP.");
                 return true;
-        }else{  //FEHLER------------------------------------------------------------------------------------------------
-            player.sendMessage("ERROR");
+            }
+            case "aufladen": {  //Aufladen des Kontos --------------------------------------------------
+                String konto = args[1];
+                int ammount = Integer.parseInt(args[2]);
+                if (!konten.contains(path + konto)) { //Wenn das Konto nicht exestiert
+                    player.sendMessage(PREFIX + "Das Konto existiert nicht.");
+                    return true;
+                } else if (MoneySystem.getMoney(player.getUniqueId().toString()) < ammount) {  //Wenn der Spieler nicht genug Geld hat
+                    player.sendMessage(PREFIX + "Du hast nicht genug Geld um das Konto aufzuladen. Dein Kontostand beträgt nur " +
+                            MoneySystem.getMoney(player.getUniqueId().toString() + "$FP"));
+                    return true;
+                } else
+                    //Wenn der Spieler keine Berrechtigung hat
+                    if (!konten.getStringList(path + konto + ".zugriff").contains(player.getUniqueId().toString())) {
+                        player.sendMessage(PREFIX + "Du hast keine Berechtigung das Konto aufzuladen. Bitte nutze \"überweisen\"");
+                        return true;
+                    } else {
+                        kontoAddMoney(konto, ammount);
+                        MoneySystem.removeMoney(player.getUniqueId().toString(), ammount);
+                        player.sendMessage(PREFIX + "Das Aufladen des Kontos " + konto + " in höhe von " + ammount + "$FP" +
+                                " war erfolgreich!");
+                    }
+                return true;
+            }
+            case "get": {   //Kontostand des Kontos bekommen--------------------------------------------
+                String konto = args[1];
+                if (!konten.contains(path + konto)) {
+                    player.sendMessage(PREFIX + "Das Konto existiert nicht!");
+                    return true;
+                } else if (!konten.getStringList(path + konto + ".zugriff").contains(player.getUniqueId().toString())) {   //Wenn der Spieler keinen Zugriff hat
+                    player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto");
+                    return true;
+                } else {
+                    player.sendMessage(PREFIX + "Der Kontostand beträgt " + kontoGetMoney(konto) + "$FP");
+                    return true;
+                }
+
+            }
+            case "überweisen" :{
+                //TODO überweise vorgang von Konto zu Konto
+            }
+            default:   //FEHLER------------------------------------------------------------------------------------------------
+                player.sendMessage("ERROR");
+                break;
         }
 
         konten.saveConfig();
