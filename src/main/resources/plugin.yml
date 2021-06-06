@@ -1,0 +1,37 @@
+name: Tutorial
+version: ${project.version}
+main: de.freddy.tutorial.Tutorial
+api-version: 1.16
+authors: [ Freddy880 ]
+description: Ein Test plugin
+
+commands:
+  heal:
+    description: Dierser Befehl healt dich.
+    aliases: ["healme"]
+  spawn:
+    description: Dieser Befehl teleportiert dich zum spawn.
+    aliases: "setspawn"
+  money:
+    description: Mit diesem befehl kann man sein Konto verwallten
+    aliases: "pay"
+  sendmoney:
+    description: mit diesem Befehl kann man geld automatisiert an andere schicken
+  konto:
+    description: mit diesem Befehl kann man Geld auf ein Konto schieben oder ein Konto erstellen
+  ping:
+    description: mit diesem Befehl kann der Spieler seine Ping abfragen
+
+permissions:
+  de.freddy.tutorial.heal:
+    description: Damit kannst du dich healen.
+    default: op
+  de.freddy.tutorial.setspawn:
+    description: Damit kannst du den Spawn setzen.
+    default: op
+  de.freddy.moneyAdmin:
+    description: Hiermit kann mann das Geld der Spieler verwallten
+    default: op
+  de.freddysMoney.buysing:
+    description: Permission, mitder man Kaufschilder erstellen kann
+    default: op
