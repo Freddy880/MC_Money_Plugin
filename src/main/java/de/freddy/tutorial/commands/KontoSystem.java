@@ -77,18 +77,29 @@ public class KontoSystem implements CommandExecutor {
             player.sendMessage(PREFIX + "Das abheben von " + menge + "$FP war erfolgreich! Das konto hat noch " +
                     kontoGetMoney(konto) + "$FP.");
             return true;
-        }else if(args[0].equals("aufladen")) {
+        }else if(args[0].equals("aufladen")) {  //Aufladen des Kontos --------------------------------------------------
             String konto = args[1];
             int ammount = Integer.parseInt(args[2]);
-            if(!konten.contains(path + konto)) {
+            if(!konten.contains(path + konto)) { //Wenn das Konto nicht exestiert
                 player.sendMessage(PREFIX + "Das Konto existiert nicht.");
                 return true;
-            }else if(MoneySystem.getMoney(player.getUniqueId().toString()) < ammount){
+            }else if(MoneySystem.getMoney(player.getUniqueId().toString()) < ammount){  //Wenn der Spieler nicht genug Geld hat
                 player.sendMessage(PREFIX + "Du hast nicht genug Geld um das Konto aufzuladen. Dein Kontostand beträgt nur " +
                         MoneySystem.getMoney(player.getUniqueId().toString() + "$FP"));
-            }
-
-        }else{
+                return true;
+            }else
+                //Wenn der Spieler keine Berrechtigung hat
+                if(!konten.getStringList(path + konto + ".zugriff").contains(player.getUniqueId().toString())) {
+                player.sendMessage(PREFIX + "Du hast keine Berrechtigung das Konto aufzuladen. Bitte nutze \"überweisen\"");
+                return true;
+            }else{
+                    kontoAddMoney(konto,ammount);
+                    MoneySystem.removeMoney(player.getUniqueId().toString(),ammount);
+                    player.sendMessage(PREFIX + "Das Aufladen des Kontos " + konto + " in höhe von " + ammount + "$FP" +
+                            " war erfolgreich!");
+                }
+                return true;
+        }else{  //FEHLER------------------------------------------------------------------------------------------------
             player.sendMessage("ERROR");
         }
 
