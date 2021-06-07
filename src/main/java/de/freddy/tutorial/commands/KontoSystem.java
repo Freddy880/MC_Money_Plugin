@@ -1,12 +1,12 @@
 package de.freddy.tutorial.commands;
 
 import de.freddy.tutorial.utils.FileConfig;
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,6 @@ public class KontoSystem implements CommandExecutor {
         }
         Player player = (Player) sender;
         //TODO: Konto evt. Command für genehmigung,
-        // Überweisen
         // konto zu konto überweisung
         // Kontostnd abfrage
 
@@ -78,14 +77,13 @@ public class KontoSystem implements CommandExecutor {
                     player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
                     return true;
                 }
-                System.out.println(menge + " " + player.getUniqueId().toString());
                 kontoRemoveMoney(konto, menge);
                 MoneySystem.addMoney(player.getUniqueId().toString(), menge);
                 player.sendMessage(PREFIX + "Das abheben von " + menge + "$FP war erfolgreich! Das konto hat noch " +
                         kontoGetMoney(konto) + "$FP.");
                 return true;
             }
-            case "aufladen": {  //Aufladen des Kontos --------------------------------------------------
+            case "withdraw": {  //Aufladen des Kontos --------------------------------------------------
                 String konto = args[1];
                 int ammount = Integer.parseInt(args[2]);
                 if (!konten.contains(path + konto)) { //Wenn das Konto nicht exestiert
@@ -122,8 +120,28 @@ public class KontoSystem implements CommandExecutor {
                 }
 
             }
-            case "überweisen" :{
-                //TODO überweise vorgang von Konto zu Konto
+            case "transfer" : {     //Überweisen an Konto als nicht Besitzer
+                //TODO Nachricht an Kontoinhaber, wenn er Online kommt
+                // evtl. auch Log wer wann was gemacht hat
+
+                String konto = args[1];
+                int amount = Integer.parseInt(args[2]);
+                if (MoneySystem.getMoney(player.getUniqueId().toString()) < amount){
+                    player.sendMessage(PREFIX + "Dein Geld reicht für die Überweisung von " + amount + "$FP " +
+                            "nicht aus");
+                    return true;
+                }else if (!konten.contains(path + konto)){
+                    player.sendMessage(PREFIX + "Das Konto existiert nicht!");
+                    return true;
+                }else {
+                    MoneySystem.removeMoney(player.getUniqueId().toString(), amount);
+                    kontoAddMoney(konto, amount);
+                    return true;
+                }
+            }
+            case "allow" : {       //Hinzufügen oder Entfernen von erlaubnissen
+                //TODO
+
             }
             default:   //FEHLER------------------------------------------------------------------------------------------------
                 player.sendMessage("ERROR");
@@ -157,20 +175,17 @@ public class KontoSystem implements CommandExecutor {
      * Kontostand erhöhen.
      * @param kontoName name des Kontos
      * @param wert int Erhöhen des wertes um
-     * @return funktioniert?
      */
-    public boolean kontoAddMoney(String kontoName, int wert){
+    public void kontoAddMoney(String kontoName, int wert){
         FileConfig konten = new FileConfig("MoneyInfo", "money.yml");
         int kontostand;
         if(!konten.contains(path + kontoName)){
             System.out.println(PREFIX + "[ERROR] kontoAddMoney: Das Konto existiert nicht");
-            return false;
         }else {
             kontostand = konten.getInt(path + kontoName + ".kontostand");
             kontostand += wert;
             konten.set(path + kontoName + ".kontostand", kontostand);
             konten.saveConfig();
-            return true;
         }
     }
 
