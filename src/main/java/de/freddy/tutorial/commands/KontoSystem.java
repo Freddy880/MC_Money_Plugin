@@ -1,6 +1,7 @@
 package de.freddy.tutorial.commands;
 
 import de.freddy.tutorial.utils.FileConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,11 +10,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class KontoSystem implements CommandExecutor {
 
     public static final String PREFIX = "§4§lKonto §r§7§o";
-    ArrayList<String> zugriff = new ArrayList<String>();
+    ArrayList<String> zugriff = new ArrayList<>();
     String path = "konten.";
 
     /**
@@ -34,11 +37,10 @@ public class KontoSystem implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
-        //TODO: Konto evt. Command für genehmigung,
-        // konto zu konto überweisung
-        // Kontostnd abfrage
+        //TODO: Konto evt.
+        // Kontostand abfrage
 
-        switch (args[0]) {
+        switch (args[0].toLowerCase()) {
             case "add":  //Argument zum hinzufügen eines Kontos-----------------------------------------------
                 String kontoname = args[1];
                 //Existiert das Konto? Wenn ja nicht verändern
@@ -55,25 +57,25 @@ public class KontoSystem implements CommandExecutor {
                 konten.set(path + kontoname + ".kontostand", 0);    //Kontostand
 
                 konten.saveConfig();
-                player.sendMessage(PREFIX + "Das Konto wurde erfolgreich erstellt");    //Massege
+                player.sendMessage(PREFIX + "Das Konto wurde erfolgreich erstellt");    //Massage
 
                 break;
             case "abheben": {    //ABHEBEN vom Konto-----------------------------------------------------
                 String konto = args[1];
-                //exestiert Konto?
+                //existiert Konto?
                 if (!konten.contains(path + konto)) {
-                    player.sendMessage(PREFIX + "Das Konto existiert nicht. Wenn es exestieren müsste bitte einen Admin " +
+                    player.sendMessage(PREFIX + "Das Konto existiert nicht. Wenn es existieren müsste bitte einen Admin " +
                             "kontaktieren");
                     return true;
                 }
                 int menge = Integer.parseInt(args[2]);
                 int kontostand = kontoGetMoney(konto);
-                List<String> berrechtigung = konten.getStringList(path + konto + ".zugriff");
+                List<String> berechtigung = konten.getStringList(path + konto + ".zugriff");
                 //Kontostand hoch genug zum abheben?
                 if (menge > kontostand) {
                     player.sendMessage(PREFIX + "Der Kontostand beträgt nur" + kontostand + "$FP. Abheben nicht möglich!");
                     return true;
-                } else if (!berrechtigung.contains(player.getUniqueId().toString())) {
+                } else if (!berechtigung.contains(player.getUniqueId().toString())) {
                     player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
                     return true;
                 }
@@ -85,30 +87,30 @@ public class KontoSystem implements CommandExecutor {
             }
             case "withdraw": {  //Aufladen des Kontos --------------------------------------------------
                 String konto = args[1];
-                int ammount = Integer.parseInt(args[2]);
-                if (!konten.contains(path + konto)) { //Wenn das Konto nicht exestiert
+                int amount = Integer.parseInt(args[2]);
+                if (!konten.contains(path + konto)) { //Wenn das Konto nicht existiert
                     player.sendMessage(PREFIX + "Das Konto existiert nicht.");
                     return true;
-                } else if (MoneySystem.getMoney(player.getUniqueId().toString()) < ammount) {  //Wenn der Spieler nicht genug Geld hat
+                } else if (MoneySystem.getMoney(player.getUniqueId().toString()) < amount) {  //Wenn der Spieler nicht genug Geld hat
                     player.sendMessage(PREFIX + "Du hast nicht genug Geld um das Konto aufzuladen. Dein Kontostand beträgt nur " +
                             MoneySystem.getMoney(player.getUniqueId().toString() + "$FP"));
                     return true;
                 } else
-                    //Wenn der Spieler keine Berrechtigung hat
+                    //Wenn der Spieler keine Berechtigung hat
                     if (!konten.getStringList(path + konto + ".zugriff").contains(player.getUniqueId().toString())) {
                         player.sendMessage(PREFIX + "Du hast keine Berechtigung das Konto aufzuladen. Bitte nutze \"überweisen\"");
                         return true;
                     } else {
-                        kontoAddMoney(konto, ammount);
-                        MoneySystem.removeMoney(player.getUniqueId().toString(), ammount);
-                        player.sendMessage(PREFIX + "Das Aufladen des Kontos " + konto + " in höhe von " + ammount + "$FP" +
+                        kontoAddMoney(konto, amount);
+                        MoneySystem.removeMoney(player.getUniqueId().toString(), amount);
+                        player.sendMessage(PREFIX + "Das Aufladen des Kontos " + konto + " in höhe von " + amount + "$FP" +
                                 " war erfolgreich!");
                     }
                 return true;
             }
             case "get": {   //Kontostand des Kontos bekommen--------------------------------------------
                 String konto = args[1];
-                if (!konten.contains(path + konto)) {
+                if (!konten.contains(path + konto)) {       //Wenn Konto nicht existiert
                     player.sendMessage(PREFIX + "Das Konto existiert nicht!");
                     return true;
                 } else if (!konten.getStringList(path + konto + ".zugriff").contains(player.getUniqueId().toString())) {   //Wenn der Spieler keinen Zugriff hat
@@ -122,26 +124,104 @@ public class KontoSystem implements CommandExecutor {
             }
             case "transfer" : {     //Überweisen an Konto als nicht Besitzer
                 //TODO Nachricht an Kontoinhaber, wenn er Online kommt
-                // evtl. auch Log wer wann was gemacht hat
-
+                //  auch Log wer wann was gemacht hat
                 String konto = args[1];
                 int amount = Integer.parseInt(args[2]);
-                if (MoneySystem.getMoney(player.getUniqueId().toString()) < amount){
+                if (MoneySystem.getMoney(player.getUniqueId().toString()) < amount){    //Wenn speieler nicht Genug Geld hat
                     player.sendMessage(PREFIX + "Dein Geld reicht für die Überweisung von " + amount + "$FP " +
                             "nicht aus");
                     return true;
-                }else if (!konten.contains(path + konto)){
+                }else if (!konten.contains(path + konto)){  //Wenn Konto nicht existiert
                     player.sendMessage(PREFIX + "Das Konto existiert nicht!");
                     return true;
                 }else {
                     MoneySystem.removeMoney(player.getUniqueId().toString(), amount);
                     kontoAddMoney(konto, amount);
+                    player.sendMessage(PREFIX + "Die Überweisung von " + amount + "$FP war erfolgreich.");
                     return true;
                 }
             }
             case "allow" : {       //Hinzufügen oder Entfernen von erlaubnissen
-                //TODO
+                String person = args[1];
+                String konto = args[2];
+                List<String> zugriffe;
+                zugriffe = konten.getStringList(path + konto + ".zugriff");
+                //Wenn ausführer nicht der Besitzer ist
+                if (!(Bukkit.getPlayer(UUID.fromString(Objects.requireNonNull(konten.getString(path + konto + ".besitzer")))) == player)){
+                    player.sendMessage(PREFIX + "Nur der Besitzer kann die Berechtigungen ändern!");
+                    return true;
+                }else if (!konten.contains(path + konto)){    //Wenn das Konto nicht existiert
+                    player.sendMessage(PREFIX + "Das Konto existiert nicht!");
+                    return true;
+                }else if(Bukkit.getPlayer(person).getUniqueId().toString() == null) {    //Wenn der Spieler nicht existiert
+                    player.sendMessage(PREFIX + "Der Spieler existiert nicht!");
+                    return true;
+                }else if (zugriffe.contains(Objects.requireNonNull(Bukkit.getPlayer(person)).getUniqueId().toString())){
+                    player.sendMessage(PREFIX + "Es hat sich nichts geändert, da der Spieler schon die Erlaubnis hat.");
+                    return true;
+                }else {
+                    zugriffe.add(Objects.requireNonNull(Bukkit.getPlayer(person)).getUniqueId().toString());
+                    konten.set(path + konto + ".zugriff", zugriffe);
+                    konten.saveConfig();
+                    player.sendMessage(PREFIX + "Dem Spieler " + person + "wurde der Zugriff auf das Konto erteilt");
+                    return true;
+                }
+            }
+            case  "ban" : {
+                String person = args[1];
+                String konto = args[2];
+                if (!(Bukkit.getPlayer(UUID.fromString(Objects.requireNonNull(konten.getString(path + konto + ".besitzer")))) == player)){
+                    player.sendMessage(PREFIX + "Nur der Besitzer kann die Berechtigungen ändern!");
+                    return true;
+                }else if (!konten.contains(path + konto)){    //Wenn das Konto nicht existiert
+                    player.sendMessage(PREFIX + "Das Konto existiert nicht!");
+                    return true;
+                }else if(Bukkit.getPlayer(person) == null) {    //Wenn der Spieler nicht existiert
+                    player.sendMessage(PREFIX + "Der Spieler existiert nicht!");
+                    return true;
+                }else {
+                    List<String> zugriffe;
+                    zugriffe = konten.getStringList(path + konto + ".zugriff");
+                    zugriffe.remove(Objects.requireNonNull(Bukkit.getPlayer(person)).getUniqueId().toString());
+                    konten.set(path + konto + ".zugriff", zugriffe);
+                    konten.saveConfig();
+                    player.sendMessage(PREFIX + "Dem Spieler " + person + "wurde der Zugriff auf das Konto genommen");
+                    return true;
+                }
+            }
+            case "sendfrom" : {
+                if(args[2].toLowerCase().equals("tokonto")){
+                    String konto = args[1];
+                    String konto1 = args[3];
+                    //existiert Konto?
+                    if (!konten.contains(path + konto) || !konten.contains(path + konto1) ) {
+                        player.sendMessage(PREFIX + "Eins der Konten existiert nicht. Wenn du denkst dies ist ein Fehler," +
+                                "kontaktiere bitte einen Admin");
+                        return true;
+                    }
+                    int menge = Integer.parseInt(args[4]);
+                    int kontostand = kontoGetMoney(konto);
+                    List<String> berechtigung = konten.getStringList(path + konto + ".zugriff");
+                    //Kontostand hoch genug zum abheben?
+                    if (menge > kontostand) {
+                        player.sendMessage(PREFIX + "Der Kontostand beträgt nur" + kontostand + "$FP. Versenden nicht möglich!");
+                        return true;
+                    } else if (!berechtigung.contains(player.getUniqueId().toString())) {
+                        player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
+                        return true;
+                    }
+                    //Durchführung
+                    kontoRemoveMoney(konto, menge);
+                    kontoAddMoney(konto1, menge);
+                    player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das konto hat noch " +
+                            kontoGetMoney(konto) + "$FP.");
+                    return true;
 
+                }else if(args[2].toLowerCase().equals("toplayer")){
+                    //TODO
+                    player.sendMessage("Will be added in future!");
+                    return true;
+                }
             }
             default:   //FEHLER------------------------------------------------------------------------------------------------
                 player.sendMessage("ERROR");
@@ -208,7 +288,7 @@ public class KontoSystem implements CommandExecutor {
     }
 
     /**
-     * Zum removen von Geld vom Konto
+     * Zum remove von Geld vom Konto
      * @param kontoName Name des Kontos
      * @param wert  wert der runter soll
      */
