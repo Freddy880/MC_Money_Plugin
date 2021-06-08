@@ -1,19 +1,19 @@
-package de.freddy.tutorial;
+package de.freddy.money_system;
 
-import de.freddy.tutorial.commands.*;
-import de.freddy.tutorial.listener.JoinQuitListener;
-import de.freddy.tutorial.singevent.SingEvents;
-import de.freddy.tutorial.utils.FileConfig;
+import de.freddy.money_system.commands.*;
+import de.freddy.money_system.listener.JoinQuitListener;
+import de.freddy.money_system.singevent.SingEvents;
+import de.freddy.money_system.utils.FileConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Tutorial extends JavaPlugin {
+public final class Main extends JavaPlugin {
 
     public static String PREFIX = config().getString("PREFIX");
-    public static Tutorial INSTANCE;
+    public static Main INSTANCE;
 
-    public Tutorial(){
+    public Main(){
         INSTANCE = this;
     }
 

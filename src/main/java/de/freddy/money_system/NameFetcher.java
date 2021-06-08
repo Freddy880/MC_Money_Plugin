@@ -1,4 +1,4 @@
-package de.freddy.tutorial;//package your.package.here;
+package de.freddy.money_system;//package your.package.here;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

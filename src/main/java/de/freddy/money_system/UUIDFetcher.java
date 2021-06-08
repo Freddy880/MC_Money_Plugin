@@ -27,7 +27,7 @@ From Github: https://github.com/ThexXTURBOXx/McUUIDFetcher
 (Latest acess: 06.06.2021)
  */
 
-package de.freddy.tutorial;//package your.package.here;
+package de.freddy.money_system;//package your.package.here;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

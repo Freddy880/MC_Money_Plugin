@@ -1,6 +1,6 @@
-package de.freddy.tutorial.commands;
+package de.freddy.money_system.commands;
 
-import de.freddy.tutorial.Tutorial;
+import de.freddy.money_system.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
@@ -43,7 +43,7 @@ public class moneyforCommandBlock implements CommandExecutor {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "data merge block " + bx + " " + by + " " + bz
                                 + " {SuccessCount:0b}");
                     }
-                }.runTask(Tutorial.getPlugin(Tutorial.class));
+                }.runTask(Main.getPlugin(Main.class));
             }
         }
                 return true;
