@@ -1,7 +1,7 @@
-package de.freddy.tutorial.singevent;
+package de.freddy.money_system.singevent;
 
-import de.freddy.tutorial.commands.MoneySystem;
-import de.freddy.tutorial.utils.FileConfig;
+import de.freddy.money_system.commands.MoneySystem;
+import de.freddy.money_system.utils.FileConfig;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;

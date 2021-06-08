@@ -1,6 +1,6 @@
-name: Tutorial
+name: Main
 version: ${project.version}
-main: de.freddy.tutorial.Tutorial
+main: de.freddy.tutorial.Main
 api-version: 1.16
 authors: [ Freddy880 ]
 description: Ein Test plugin

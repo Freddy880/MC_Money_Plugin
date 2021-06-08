@@ -1,4 +1,4 @@
-package de.freddy.tutorial.utils;
+package de.freddy.money_system.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

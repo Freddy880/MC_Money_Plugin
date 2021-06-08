@@ -1,6 +1,6 @@
-package de.freddy.tutorial.commands;
+package de.freddy.money_system.commands;
 
-import de.freddy.tutorial.Tutorial;
+import de.freddy.money_system.Main;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,7 +15,7 @@ public class HealCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (!(sender instanceof Player)) {
-            Tutorial.INSTANCE.log("Du bist kein Spieler");
+            Main.INSTANCE.log("Du bist kein Spieler");
             return true;
         }
 
@@ -24,10 +24,10 @@ public class HealCommand implements CommandExecutor {
         if(player.hasPermission("de.freddy.tutorial.heal")){
             player.setHealth(20d);
             player.setFoodLevel(20);
-            player.sendMessage(Tutorial.PREFIX + "Du wurdest geheilt!");
+            player.sendMessage(Main.PREFIX + "Du wurdest geheilt!");
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.3f, 1.2f);
         }else {
-            player.sendMessage(Tutorial.PREFIX + "Du hast nicht die richtige Permission. Bitte frage einen Admin, dir diese zu geben.");
+            player.sendMessage(Main.PREFIX + "Du hast nicht die richtige Permission. Bitte frage einen Admin, dir diese zu geben.");
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.3f, 1.2f);
         }
         return true;
