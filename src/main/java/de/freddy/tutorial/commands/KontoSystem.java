@@ -16,7 +16,7 @@ import java.util.UUID;
 public class KontoSystem implements CommandExecutor {
 
     public static final String PREFIX = "§4§lKonto §r§7§o";
-    ArrayList<String> zugriff = new ArrayList<String>();
+    ArrayList<String> zugriff = new ArrayList<>();
     String path = "konten.";
 
     /**
@@ -154,7 +154,7 @@ public class KontoSystem implements CommandExecutor {
                 }else if (!konten.contains(path + konto)){    //Wenn das Konto nicht existiert
                     player.sendMessage(PREFIX + "Das Konto existiert nicht!");
                     return true;
-                }else if(Bukkit.getPlayer(person).getUniqueId().toString() == null) {    //Wenn der Spieler nicht existiert
+                }else if(Objects.requireNonNull(Bukkit.getPlayer(person)).getUniqueId().toString() == null) {    //Wenn der Spieler nicht existiert
                     player.sendMessage(PREFIX + "Der Spieler existiert nicht!");
                     return true;
                 }else if (zugriffe.contains(Objects.requireNonNull(Bukkit.getPlayer(person)).getUniqueId().toString())){
@@ -191,7 +191,7 @@ public class KontoSystem implements CommandExecutor {
                 }
             }
             case "sendfrom" : {
-                if(args[2].toLowerCase().equals("tokonto")){
+                if(args[2].equalsIgnoreCase("tokonto")){
                     String konto = args[1];
                     String konto1 = args[3];
                     //existiert Konto?
@@ -218,10 +218,31 @@ public class KontoSystem implements CommandExecutor {
                             kontoGetMoney(konto) + "$FP.");
                     return true;
 
-                }else if(args[2].toLowerCase().equals("toplayer")){
-                    //TODO
-                    player.sendMessage("Will be added in future!");
+                }else if(args[2].equalsIgnoreCase("toplayer")){
+                    String konto = args[1];
+                    List<String> berechtigung = konten.getStringList(path + konto + ".zugriff");
+                    String spieler = args[3];
+                    int menge = Integer.parseInt(args[4]);
+                    Player spieler1 = Bukkit.getPlayer(spieler);
+                    if(spieler1 == null){   //Exestiert Spieler
+                        player.sendMessage(PREFIX + "Der Spieler existiert nicht!");
+                        return true;
+                    }else if(!konten.contains(path + konto)){    //wenn konto nicht existiert
+                        player.sendMessage(PREFIX + "Das Konto existiert nicht!");
+                        return true;
+                    }else if(konten.getInt(path + konto + ".kontostand") < menge){  //Wenn der Kontostand zu gering ist
+                        player.sendMessage(PREFIX + "Das konto hat nicht genug Geld.");
+                        return true;
+                    } else if (!berechtigung.contains(player.getUniqueId().toString())) {   //wenn keine Berechtigung
+                    player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
                     return true;
+                    }else {
+                        MoneySystem.removeMoney(spieler1.getUniqueId().toString(),menge);
+                        kontoRemoveMoney(konto,menge);
+                        player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das konto hat noch " +
+                                kontoGetMoney(konto) + "$FP.");
+                        return true;
+                    }
                 }
             }
             default:   //FEHLER------------------------------------------------------------------------------------------------
