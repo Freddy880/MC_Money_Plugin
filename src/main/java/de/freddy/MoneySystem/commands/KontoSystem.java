@@ -154,8 +154,8 @@ public class KontoSystem implements CommandExecutor {
                 } else if (!konten.contains(path + konto)) {    //Wenn das Konto nicht existiert
                     player.sendMessage(PREFIX + "Das Konto existiert nicht!");
                     return true;
-                } else if (Objects.requireNonNull(Bukkit.getPlayer(person)).getUniqueId().toString() == null) {    //Wenn der Spieler nicht existiert
-                    player.sendMessage(PREFIX + "Der Spieler existiert nicht!");
+                } else if (Bukkit.getPlayer(person) == null) {    //Wenn der Spieler nicht existiert
+                    player.sendMessage(PREFIX + "Der Spieler existiert nicht oder ist Offline.");
                     return true;
                 } else if (zugriffe.contains(Objects.requireNonNull(Bukkit.getPlayer(person)).getUniqueId().toString())) {
                     player.sendMessage(PREFIX + "Es hat sich nichts geändert, da der Spieler schon die Erlaubnis hat.");
@@ -178,7 +178,7 @@ public class KontoSystem implements CommandExecutor {
                     player.sendMessage(PREFIX + "Das Konto existiert nicht!");
                     return true;
                 } else if (Bukkit.getPlayer(person) == null) {    //Wenn der Spieler nicht existiert
-                    player.sendMessage(PREFIX + "Der Spieler existiert nicht!");
+                    player.sendMessage(PREFIX + "Der Spieler existiert nicht oder ist Offline!");
                     return true;
                 } else {
                     List<String> zugriffe;
@@ -225,7 +225,7 @@ public class KontoSystem implements CommandExecutor {
                     int menge = Integer.parseInt(args[4]);
                     Player spieler1 = Bukkit.getPlayer(spieler);
                     if (spieler1 == null) {   //Exestiert Spieler
-                        player.sendMessage(PREFIX + "Der Spieler existiert nicht!");
+                        player.sendMessage(PREFIX + "Der Spieler existiert nicht oder ist offline!");
                         return true;
                     } else if (!konten.contains(path + konto)) {    //wenn konto nicht existiert
                         player.sendMessage(PREFIX + "Das Konto existiert nicht!");
