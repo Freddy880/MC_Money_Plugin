@@ -1,5 +1,5 @@
 /*
-LICENSE of these Class:
+LICENSE of this Class:
 MIT License
 
 Copyright (c) 2020 Nico Mexis

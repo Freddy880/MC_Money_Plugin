@@ -22,8 +22,6 @@ public final class Main extends JavaPlugin {
         // Plugin startup logic
         this.register();
         log(config().getString("Plugin geladen"));
-
-
     }
 
     @Override
