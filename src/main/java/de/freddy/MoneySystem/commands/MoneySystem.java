@@ -1,7 +1,7 @@
-package de.freddy.tutorial.commands;
+package de.freddy.MoneySystem.commands;
 
-import de.freddy.tutorial.UUIDFetcher;
-import de.freddy.tutorial.utils.FileConfig;
+import de.freddy.MoneySystem.UUIDFetcher;
+import de.freddy.MoneySystem.utils.FileConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

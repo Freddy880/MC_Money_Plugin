@@ -1,6 +1,6 @@
-package de.freddy.tutorial.commands;
+package de.freddy.MoneySystem.commands;
 
-import de.freddy.tutorial.Tutorial;
+import de.freddy.MoneySystem.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,12 +12,12 @@ public class PingCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage(Tutorial.PREFIX + "Nur Spieler können diesen Command ausführen");
+            sender.sendMessage(Main.PREFIX + "Nur Spieler können diesen Command ausführen");
             return true;
         }
         Player player = (Player) sender;
         if(args.length == 0){
-        player.sendMessage(Tutorial.PREFIX + "§r§aDein Ping liegt bei §e" + player.getPing());
+        player.sendMessage(Main.PREFIX + "§r§aDein Ping liegt bei §e" + player.getPing());
         return true;
         }else{
             Player otherplayer = Bukkit.getPlayer(args[0]);
@@ -26,7 +26,7 @@ public class PingCommand implements CommandExecutor {
                 return true;
             }else{
                 assert otherplayer != null;
-                player.sendMessage(Tutorial.PREFIX + "§r§aDer Ping von " + otherplayer.getName() + " liegt bei §e" + otherplayer.getPing());
+                player.sendMessage(Main.PREFIX + "§r§aDer Ping von " + otherplayer.getName() + " liegt bei §e" + otherplayer.getPing());
                 return true;
             }
         }
