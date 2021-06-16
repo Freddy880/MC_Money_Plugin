@@ -7,5 +7,6 @@ public class CreateConfig {
     }
     public void makeConfig(){
 
+
     }
 }
