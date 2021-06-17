@@ -237,7 +237,7 @@ public class KontoSystem implements CommandExecutor {
                         player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
                         return true;
                     } else {
-                        MoneySystem.removeMoney(spieler1.getUniqueId().toString(), menge);
+                        MoneySystem.addMoney(spieler1.getUniqueId().toString(), menge);
                         kontoRemoveMoney(konto, menge);
                         player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das konto hat noch " +
                                 kontoGetMoney(konto) + "$FP.");
