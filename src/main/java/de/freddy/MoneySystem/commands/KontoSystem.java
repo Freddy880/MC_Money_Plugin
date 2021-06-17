@@ -139,6 +139,8 @@ public class KontoSystem implements CommandExecutor {
                 } else {
                     MoneySystem.removeMoney(player.getUniqueId().toString(), amount);
                     kontoAddMoney(konto, amount);
+                    player.sendMessage(PREFIX + "Die Überweisung von " + amount + "$FP " +
+                            "an das Konto " + konto + " war erfolgreich.");
                     return true;
                 }
             }
