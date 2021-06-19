@@ -19,7 +19,7 @@ public class SpawnCommand implements CommandExecutor {
         Player player = (Player) sender;
         FileConfig spawns = new FileConfig("locations.yml");
         if(label.equalsIgnoreCase("setspawn")) {
-            if(player.hasPermission("de.freddy.tutorial.setspawn")){
+            if(player.hasPermission("de.freddy.MoneySystem.setspawn")){
                 spawns.set("spawn", LocationUtilies.loc2String(player.getLocation()));
                 spawns.saveConfig();
                 player.sendMessage(Main.PREFIX + "Spawn gesetzt");

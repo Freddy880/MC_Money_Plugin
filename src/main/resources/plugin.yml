@@ -23,10 +23,10 @@ commands:
     description: mit diesem Befehl kann der Spieler seine Ping abfragen
 
 permissions:
-  de.freddy.tutorial.heal:
+  de.freddy.MoneySystem.heal:
     description: Damit kannst du dich healen.
     default: op
-  de.freddy.tutorial.setspawn:
+  de.freddy.MoneySystem.setspawn:
     description: Damit kannst du den Spawn setzen.
     default: op
   de.freddy.moneyAdmin:
