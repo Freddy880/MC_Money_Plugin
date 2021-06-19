@@ -16,9 +16,23 @@ public class Message implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
+        Player empfaenger = Bukkit.getPlayer(args[1]);
         switch (args[0]){
             case "send": {
-                //TODO
+                if(args.length != 3){   //Genug Argumente
+                    player.sendMessage(Main.PREFIX + "Zu Wenige oder zu viele Argumente!");
+                    return true;
+                }else if (  empfaenger == null){    //Exestiert emphänger
+                    player.sendMessage(Main.PREFIX + "Der Spieler existiert nicht!");
+                    return true;
+                }else if(!empfaenger.hasPlayedBefore() && !Bukkit.getOnlinePlayers().contains(empfaenger)){ //War er schon auf dem Server
+                    player.sendMessage(Main.PREFIX + "Der Spieler war noch nie auf dem Server!");
+                    return true;
+                }
+                sendMessage(player.getName(), empfaenger.getUniqueId().toString(),args[2].replace("\"",""));
+                player.sendMessage(Main.PREFIX + "Das versenden war erfolgreich!");
+                return true;
+
             }
             default:{
                 player.sendMessage(Main.PREFIX + "Falscher nutzen des Commands gebe help ein!");
