@@ -3,6 +3,7 @@ package de.freddy.MoneySystem.commands;
 import de.freddy.MoneySystem.Main;
 import de.freddy.MoneySystem.utils.FileConfig;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,10 +17,10 @@ public class Message implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
-        Player empfaenger = Bukkit.getPlayer(args[1]);
+        OfflinePlayer empfaenger = Bukkit.getOfflinePlayer(args[1]);
         switch (args[0]){
-            case "send": {
-                if(args.length != 3){   //Genug Argumente
+            case "send":
+                if(args.length < 3){   //Genug Argumente
                     player.sendMessage(Main.PREFIX + "Zu Wenige oder zu viele Argumente!");
                     return true;
                 }else if (  empfaenger == null){    //Exestiert emphänger
@@ -29,18 +30,20 @@ public class Message implements CommandExecutor {
                     player.sendMessage(Main.PREFIX + "Der Spieler war noch nie auf dem Server!");
                     return true;
                 }
-                sendMessage(player.getName(), empfaenger.getUniqueId().toString(),args[2].replace("\"",""));
+                StringBuilder mess = new StringBuilder();   //Erstellt den String aus den Argumenten
+                for (int i = 2; i < args.length; i++) {
+                    mess.append(args[i]);
+                    mess.append(" ");
+                }
+                sendMessage(player.getName(), empfaenger.getUniqueId().toString(), mess.toString());
                 player.sendMessage(Main.PREFIX + "Das versenden war erfolgreich!");
                 return true;
 
-            }
-            default:{
+            default:
                 player.sendMessage(Main.PREFIX + "Falscher nutzen des Commands gebe help ein!");
                 return true;
-            }
-        }
 
-        return false;
+        }
     }
 
     /**

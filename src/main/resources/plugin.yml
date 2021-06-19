@@ -21,6 +21,8 @@ commands:
     description: mit diesem Befehl kann man Geld auf ein Konto schieben oder ein Konto erstellen
   ping:
     description: mit diesem Befehl kann der Spieler seine Ping abfragen
+  message:
+    description: Mit diesem befehl kann man nachrichten verschicken
 
 permissions:
   de.freddy.MoneySystem.heal:
