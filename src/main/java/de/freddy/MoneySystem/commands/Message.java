@@ -11,19 +11,21 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Message implements CommandExecutor {
     FileConfig messages = new FileConfig("MoneyInfo", "messages.yml");
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
-        OfflinePlayer empfaenger = Bukkit.getOfflinePlayer(args[1]);
         switch (args[0]){
             case "send":
                 if(args.length < 3){   //Genug Argumente
                     player.sendMessage(Main.PREFIX + "Zu Wenige oder zu viele Argumente!");
                     return true;
-                }else if (  empfaenger == null){    //Exestiert emphänger
+                }
+                OfflinePlayer empfaenger = Bukkit.getOfflinePlayer(args[1]);
+                if (  empfaenger == null){    //Exestiert emphänger
                     player.sendMessage(Main.PREFIX + "Der Spieler existiert nicht!");
                     return true;
                 }else if(!empfaenger.hasPlayedBefore() && !Bukkit.getOnlinePlayers().contains(empfaenger)){ //War er schon auf dem Server
@@ -39,9 +41,17 @@ public class Message implements CommandExecutor {
                 player.sendMessage(Main.PREFIX + "Das versenden war erfolgreich!");
                 return true;
 
+            case "get" :
+                if (messages.getStringList(player.getUniqueId().toString()).size() < 1) {
+                    player.sendMessage(Main.PREFIX + "Du hast keine Benachrichtigungen.");
+                }
+                getMessages(player.getUniqueId().toString());
+                return true;
+
             default:
                 player.sendMessage(Main.PREFIX + "Falscher nutzen des Commands gebe help ein!");
                 return true;
+
 
         }
     }
@@ -54,6 +64,11 @@ public class Message implements CommandExecutor {
      */
     public void sendMessage (String absender, String uuidOfReceiver, String message) {
         List<String> infos = messages.getStringList(uuidOfReceiver);
+        if (Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(uuidOfReceiver))){
+            Player player = Bukkit.getPlayer(uuidOfReceiver);
+            assert player != null;
+            player.sendMessage(Main.PREFIX + "Du hast soeben eine Nachricht erhalten!");
+        }
         infos.add(absender +":" + message);
         messages.set(uuidOfReceiver, infos);
         messages.saveConfig();
@@ -65,18 +80,42 @@ public class Message implements CommandExecutor {
      */
     public void getMessages (String uuidOfPlayer) {
         List<String> infos = messages.getStringList(uuidOfPlayer);
-        Player player = Bukkit.getPlayer(uuidOfPlayer);
+        Player player = Bukkit.getPlayer(UUID.fromString(uuidOfPlayer));
+        System.out.println(uuidOfPlayer);
+        System.out.println(infos);
         if (player == null){
             Bukkit.getConsoleSender().sendMessage(Main.PREFIX + "[ERROR] Methode getMessage Message.java \n" +
                     "Player == null");
             return;
         }
-        for (String info : infos) {
-            String[] m = info.split(":");
-            player.sendMessage("Nachrricht von: " + m[0]);
+        for (int i = 0; i < infos.size(); i++) {
+            String[] m = infos.get(i).split(":");
+            player.sendMessage("§b§o" + i +".§r§a§l Nachricht von: §6" + m[0] + ":");
             for (int b = 1; b < m.length; b++) {
-                player.sendMessage(m[b]);
+                player.sendMessage( "§7§o"+m[b]);
             }
+        }
+    }
+
+    /**
+     * Sends a apecial masssage to the player
+     *
+     * @param uuidOfPlayer  uuid of player who got the message
+     * @param index number of message
+     */
+    public void getMessage (String uuidOfPlayer, int index) {
+        List<String> info = messages.getStringList(uuidOfPlayer);
+        String infos = info.get(index);
+        Player player = Bukkit.getPlayer(UUID.fromString(uuidOfPlayer));
+        if (player == null){
+            Bukkit.getConsoleSender().sendMessage(Main.PREFIX + "[ERROR] Methode getMessage Message.java \n" +
+                    "Player == null");
+            return;
+        }
+        String[] m = infos.split(":");
+        player.sendMessage("Nachrricht von: " + m[0]);
+        for (int b = 1; b < m.length; b++) {
+            player.sendMessage(m[b]);
         }
     }
 }
