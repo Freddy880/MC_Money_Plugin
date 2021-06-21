@@ -149,6 +149,8 @@ public class KontoSystem implements CommandExecutor {
                 } else {
                     MoneySystem.removeMoney(player.getUniqueId().toString(), amount);
                     kontoAddMoney(konto, amount);
+                    player.sendMessage(PREFIX + "Die Überweisung von " + amount + "$FP " +
+                            "war erfolgreich!");
                     //Notification
                     if(!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
                         Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + amount + ("$Fp" +
