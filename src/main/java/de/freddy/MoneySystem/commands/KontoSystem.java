@@ -100,7 +100,7 @@ public class KontoSystem implements CommandExecutor {
                 } else
                     //Wenn der Spieler keine Berrechtigung hat
                     if (!konten.getStringList(path + konto + ".zugriff").contains(player.getUniqueId().toString())) {
-                        player.sendMessage(PREFIX + "Du hast keine Berechtigung das Konto aufzuladen. Bitte nutze \"überweisen\"");
+                        player.sendMessage(PREFIX + "Du hast keine Berechtigung das Konto aufzuladen. Bitte nutze \"transfer\"");
                         return true;
                     } else {
                         kontoAddMoney(konto, ammount);
