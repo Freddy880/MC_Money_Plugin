@@ -37,7 +37,7 @@ public class Message implements CommandExecutor {
                     mess.append(args[i]);
                     mess.append(" ");
                 }
-                sendMessage(player.getName(), empfaenger.getUniqueId().toString(), mess.toString());
+                sendNotification(player.getName(), empfaenger.getUniqueId().toString(), mess.toString());
                 player.sendMessage(Main.PREFIX + "Das versenden war erfolgreich!");
                 return true;
 
@@ -48,11 +48,23 @@ public class Message implements CommandExecutor {
                 getMessages(player.getUniqueId().toString());
                 return true;
 
+            case "delete" :
+                if(args[1].equalsIgnoreCase("all")) {
+                    messages.set(player.getUniqueId().toString(),null);
+                    player.sendMessage(Main.PREFIX + "Das Löschen aller Nachrichten war erfolgreich");
+                    messages.saveConfig();
+                    return true;
+                }else{
+                    int index = Integer.parseInt(args[1]);
+                List<String> m = messages.getStringList(player.getUniqueId().toString());
+                m.remove(index);
+                messages.set(player.getUniqueId().toString(),m);
+                messages.saveConfig();
+                }
+
             default:
                 player.sendMessage(Main.PREFIX + "Falscher nutzen des Commands gebe help ein!");
                 return true;
-
-
         }
     }
 
@@ -62,7 +74,7 @@ public class Message implements CommandExecutor {
      * @param uuidOfReceiver    UUID des Empfängers String
      * @param message   String message
      */
-    public void sendMessage (String absender, String uuidOfReceiver, String message) {
+    public void sendNotification(String absender, String uuidOfReceiver, String message) {
         List<String> infos = messages.getStringList(uuidOfReceiver);
         if (Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(uuidOfReceiver))){
             Player player = Bukkit.getPlayer(uuidOfReceiver);
