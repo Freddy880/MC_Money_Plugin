@@ -142,4 +142,13 @@ public class Message implements CommandExecutor {
             player.sendMessage(m[b]);
         }
     }
+    /**
+     * Kontrolliet ob ein Spieler nachrichten hat
+     * @param uuidOfPlayer UUID des Speilers in String
+     * @return boolean
+     */
+    public static boolean hasMessages(String uuidOfPlayer){
+        FileConfig messages = new FileConfig("MoneyInfo", "messages.yml");
+        return messages.getStringList(uuidOfPlayer).size() >= 1;
+    }
 }
