@@ -84,6 +84,11 @@ public class KontoSystem implements CommandExecutor {
                 MoneySystem.addMoney(player.getUniqueId().toString(), menge);
                 player.sendMessage(PREFIX + "Das abheben von " + menge + "$FP war erfolgreich! Das konto hat noch " +
                         kontoGetMoney(konto) + "$FP.");
+                //Notification
+                if(!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
+                    Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$Fp" +
+                            " vom Konto " + konto + " abgehoben!"));
+                }
                 return true;
             }
             case "withdraw": {  //Aufladen des Kontos --------------------------------------------------
@@ -107,6 +112,11 @@ public class KontoSystem implements CommandExecutor {
                         player.sendMessage(PREFIX + "Das Aufladen des Kontos " + konto + " in höhe von " + ammount + "$FP" +
                                 " war erfolgreich!");
                     }
+                    //Notifivation
+                if(!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
+                    Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + ammount + ("$Fp" +
+                            " dem " + konto + " hinzugefügt!"));
+                }
                 return true;
             }
             case "get": {   //Kontostand des Kontos bekommen--------------------------------------------
@@ -139,6 +149,11 @@ public class KontoSystem implements CommandExecutor {
                 } else {
                     MoneySystem.removeMoney(player.getUniqueId().toString(), amount);
                     kontoAddMoney(konto, amount);
+                    //Notification
+                    if(!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
+                        Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + amount + ("$Fp" +
+                                " ans Konto " + konto + " überwiesen!"));
+                    }
                     return true;
                 }
             }
@@ -165,9 +180,12 @@ public class KontoSystem implements CommandExecutor {
                     konten.set(path + konto + ".zugriff", zugriffe);
                     konten.saveConfig();
                     player.sendMessage(PREFIX + "Dem Spieler " + person + "wurde der Zugriff auf das Konto erteilt");
+                    //Notification
+                    Message.sendNotification("Konto System", Bukkit.getPlayer(person).getUniqueId().toString(), player.getName() + " hat dir den Zugriff" +
+                            " auf das Konto " + konto + " erteilt!");
+                    }
                     return true;
                 }
-            }
             case "ban": {
                 String person = args[1];
                 String konto = args[2];
@@ -187,8 +205,11 @@ public class KontoSystem implements CommandExecutor {
                     konten.set(path + konto + ".zugriff", zugriffe);
                     konten.saveConfig();
                     player.sendMessage(PREFIX + "Dem Spieler " + person + "wurde der Zugriff auf das Konto genommen");
-                    return true;
+                    //notification
+                    Message.sendNotification("Konto System", Bukkit.getPlayer(person).getUniqueId().toString(), player.getName() + " hat dir den Zugriff" +
+                            " auf das Konto " + konto + " genommen!");
                 }
+                    return true;
             }
             case "sendfrom": {
                 if (args[2].equalsIgnoreCase("tokonto")) {
@@ -216,6 +237,14 @@ public class KontoSystem implements CommandExecutor {
                     kontoAddMoney(konto1, menge);
                     player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das konto hat noch " +
                             kontoGetMoney(konto) + "$FP.");
+                    //Notifications
+                    Message.sendNotification("Konto System",konten.getString(path + konto1 + ".besitzer"),
+                            "Dir wurde " + menge + "$FP vom Konto " + konto + "an dein Konto " + konto1 + "überwiesen!");
+                    if(!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
+                        Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$Fp" +
+                                " von Konto" + konto + "ans Konto " + konto1 + " überwiesen!"));
+                    }
+
                     return true;
 
                 } else if (args[2].equalsIgnoreCase("toplayer")) {
@@ -237,10 +266,17 @@ public class KontoSystem implements CommandExecutor {
                         player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
                         return true;
                     } else {
-                        MoneySystem.removeMoney(spieler1.getUniqueId().toString(), menge);
+                        MoneySystem.addMoney(spieler1.getUniqueId().toString(), menge);
                         kontoRemoveMoney(konto, menge);
                         player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das konto hat noch " +
                                 kontoGetMoney(konto) + "$FP.");
+                        //Notifications
+                        Message.sendNotification("Konto System", spieler1.getUniqueId().toString(), "Dir " +
+                                "wurden "+ menge + "$FP vom Konto " + konto + "gegeben.");
+                        if(!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
+                            Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$Fp" +
+                                    " von Konto" + konto + "an den Spieler " + spieler1.getName() + " überwiesen!"));
+                        }
                         return true;
                     }
                 }
