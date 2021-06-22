@@ -3,10 +3,13 @@ package de.freddy.MoneySystem;
 import de.freddy.MoneySystem.commands.*;
 import de.freddy.MoneySystem.listener.JoinQuitListener;
 import de.freddy.MoneySystem.singevent.SingEvents;
+import de.freddy.MoneySystem.utils.CreateConfig;
 import de.freddy.MoneySystem.utils.FileConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public final class Main extends JavaPlugin {
 
@@ -21,6 +24,10 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         this.register();
+        File config = new File("/MoneyInfo/config.yml");
+        if (!config.isFile()){
+            CreateConfig.makeConfig();
+        }
         log(config().getString("Plugin geladen"));
     }
 
