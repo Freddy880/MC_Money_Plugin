@@ -47,6 +47,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginCommand("sendmoney").setExecutor(new moneyforCommandBlock());
         Bukkit.getPluginCommand("konto").setExecutor(new KontoSystem());
         Bukkit.getPluginCommand("ping").setExecutor(new PingCommand());
+        Bukkit.getPluginCommand("message").setExecutor(new Message());
     }
     public static FileConfig config() {
         return new FileConfig("MoneyInfo", "config.yml");
