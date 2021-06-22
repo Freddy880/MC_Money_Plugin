@@ -88,8 +88,8 @@ public class Message implements CommandExecutor {
     public static void sendNotification(String absender, String uuidOfReceiver, String message) {
         FileConfig messages = new FileConfig("MoneyInfo", "messages.yml");
         List<String> infos = messages.getStringList(uuidOfReceiver);
-        if (Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(uuidOfReceiver))){
-            Player player = Bukkit.getPlayer(uuidOfReceiver);
+        if (Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(UUID.fromString(uuidOfReceiver)))){
+            Player player = Bukkit.getPlayer(UUID.fromString(uuidOfReceiver));
             assert player != null;
             player.sendMessage(Main.PREFIX + "Du hast soeben eine Nachricht erhalten!");
         }

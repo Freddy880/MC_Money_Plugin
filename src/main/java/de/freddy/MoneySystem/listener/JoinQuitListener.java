@@ -13,7 +13,7 @@ public class JoinQuitListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
-        player.sendTitle("Willkommen Zurück", player.getName(),1,3,1);
+        player.sendTitle("Willkommen Zurück", player.getName(),1,10,1);
         event.setJoinMessage("§a§l+§4§r " + player.getDisplayName() + " " + Main.config().getString("Join Message"));
         if (Message.hasMessages(player.getUniqueId().toString())){
             player.sendMessage(Main.PREFIX + "Du hast Nachrichten! gebe /message get ein, um diese zu lesen!");
