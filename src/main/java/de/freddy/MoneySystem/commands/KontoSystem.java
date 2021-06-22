@@ -315,7 +315,8 @@ public class KontoSystem implements CommandExecutor {
      * @param kontoName name des Kontos
      * @param wert      int Erhöhen des wertes um
      */
-    public void kontoAddMoney(String kontoName, int wert) {
+    public static void kontoAddMoney(String kontoName, int wert) {
+        String path = "konten.";
         FileConfig konten = new FileConfig("MoneyInfo", "money.yml");
         int kontostand;
         if (!konten.contains(path + kontoName)) {
@@ -335,7 +336,8 @@ public class KontoSystem implements CommandExecutor {
      * @return -wenn -1 Error
      * /sonst geld in int
      */
-    public int kontoGetMoney(String kontoName) {
+    public static int kontoGetMoney(String kontoName) {
+        String path = "konten.";
         FileConfig konten = new FileConfig("MoneyInfo", "money.yml");
         int wert;
         if (!konten.contains(path + kontoName)) {
