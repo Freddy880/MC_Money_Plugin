@@ -56,8 +56,19 @@ public class moneyforCommandBlock implements CommandExecutor {
                 nearPlayer.sendMessage(MoneySystem.PREFIX + "DU hast eine Dienstleistung in Anspruch genommen! Der Betrag" +
                         "von " + preis + "$FP wurde an das Konto " + konto + " überwiesen. Bei fehlern wende dich an" +
                         "einen Admin");
+                return true;
             }
         }
+        final Block commandBlock = ((BlockCommandSender) sender).getBlock();
+        final int bx = commandBlock.getX();
+        final int by = commandBlock.getY();
+        final int bz = commandBlock.getZ();
+        new BukkitRunnable() {
+            public void run() {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "data merge block " + bx + " " + by + " " + bz
+                        + " {SuccessCount:0b}");
+            }
+        }.runTask(Main.getPlugin(Main.class));
         return true;
     }
 }
