@@ -279,9 +279,27 @@ public class KontoSystem implements CommandExecutor {
                     }
                 }
             }
-            default:   //FEHLER------------------------------------------------------------------------------------------------
+            case "remove": {
+                String konto = args[1];
+                if (konten.contains(path + konto)){
+                    player.sendMessage("Das Konto existiert nicht!");
+                    return true;
+                }else if (konten.getString(path+ konto + ".besitzer").equals(player.getUniqueId().toString())){
+                    player.sendMessage("Nur der Besitzer kann das Konto auflösen!");
+                    return true;
+                }else if(KontoSystem.kontoGetMoney(konto) != 0) {
+                    player.sendMessage(PREFIX + "Das Konto hat noch Guthaben. Löschen nicht möglich!");
+                    return true;
+                }else {
+                    konten.set(path + konto,null);
+                    player.sendMessage(PREFIX + "Das löschen des Kontos war erfolgreich.");
+                }
+                return true;
+            }
+            default: {   //FEHLER------------------------------------------------------------------------------------------------
                 player.sendMessage(PREFIX + "Command falsch genutzt gebe /MoneyPlugin help ein!");
                 break;
+            }
         }
 
         konten.saveConfig();
