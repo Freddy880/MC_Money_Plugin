@@ -5,15 +5,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
-public class KontoSystem implements CommandExecutor {
+public class KontoSystem implements CommandExecutor, TabCompleter {
 
     public static final String PREFIX = "§4§lKonto §r§7§o";
     ArrayList<String> zugriff = new ArrayList<>();
@@ -161,7 +161,7 @@ public class KontoSystem implements CommandExecutor {
                 List<String> zugriffe;
                 zugriffe = konten.getStringList(path + konto + ".zugriff");
                 //Wenn ausführer nicht der Besitzer ist
-                 if (!konten.contains(path + konto)) {    //Wenn das Konto nicht existiert
+                if (!konten.contains(path + konto)) {    //Wenn das Konto nicht existiert
                     player.sendMessage(PREFIX + "Das Konto existiert nicht!");
                     return true;
                 } else if (!(Bukkit.getPlayer(UUID.fromString(Objects.requireNonNull(konten.getString(path + konto + ".besitzer")))) == player)) {
@@ -281,17 +281,17 @@ public class KontoSystem implements CommandExecutor {
             }
             case "remove": {
                 String konto = args[1];
-                if (konten.contains(path + konto)){
+                if (konten.contains(path + konto)) {
                     player.sendMessage("Das Konto existiert nicht!");
                     return true;
-                }else if (konten.getString(path+ konto + ".besitzer").equals(player.getUniqueId().toString())){
+                } else if (konten.getString(path + konto + ".besitzer").equals(player.getUniqueId().toString())) {
                     player.sendMessage("Nur der Besitzer kann das Konto auflösen!");
                     return true;
-                }else if(KontoSystem.kontoGetMoney(konto) != 0) {
+                } else if (KontoSystem.kontoGetMoney(konto) != 0) {
                     player.sendMessage(PREFIX + "Das Konto hat noch Guthaben. Löschen nicht möglich!");
                     return true;
-                }else {
-                    konten.set(path + konto,null);
+                } else {
+                    konten.set(path + konto, null);
                     player.sendMessage(PREFIX + "Das löschen des Kontos war erfolgreich.");
                 }
                 return true;
@@ -384,5 +384,89 @@ public class KontoSystem implements CommandExecutor {
             konten.set(path + kontoName + ".kontostand", kontostand);
             konten.saveConfig();
         }
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        //create new array
+        List<String> completions = new ArrayList<>();
+        List<String> b = new ArrayList<>();
+        if (args.length == 1) {
+            b.add("add");
+            b.add("abheben");
+            b.add("withdraw");
+            b.add("get");
+            b.add("allow");
+            b.add("ban");
+            b.add("remove");
+            b.add("sendfrom");
+            b.add("transfer");
+        }
+        if (args.length == 2) {
+            switch (args[0].toLowerCase(Locale.ROOT)) {
+                case "add":
+                    b.add("<Kontoname>");
+                    break;
+                case "abheben":
+                case "withdraw":
+                case "transfer":
+                case "sendfrom":
+                case "remove":
+                case "get":
+                    b.add("<Konto>");
+                    break;
+                case "allow":
+                case "ban":
+                    for (Player on : Bukkit.getOnlinePlayers()) {
+                        b.add(on.getName());
+                    }
+                    break;
+
+            }
+        }
+        if (args.length == 3){
+            switch (args[0].toLowerCase(Locale.ROOT)){
+                case "abheben":
+                case "withdraw":
+                case "transfer":
+                    b.add("<Menge>");
+                    break;
+                case "sendfrom":
+                    b.add("toplayer");
+                    b.add("tokonto");
+                    break;
+                case "allow":
+                case "ban":
+                    b.add("<Konto>");
+                    break;
+            }
+        }
+        if (args.length ==4){
+            if(args[0].equalsIgnoreCase("sendfrom") && args[2].equalsIgnoreCase("toplayer")){
+                for (Player on : Bukkit.getOnlinePlayers()) {
+                    b.add(on.getName());
+                }
+            }
+            else if(args[0].equalsIgnoreCase("sendfrom") && args[2].equalsIgnoreCase("tokonto")){
+                b.add("<Konto>");
+            }
+        }
+        if (args.length ==5 && args[0].equalsIgnoreCase("sendfrom")){
+            b.add("<Menge>");
+        }
+        //Sortiert die Ausgabe
+        StringUtil.copyPartialMatches(args[0], b, completions);
+        if (args.length == 1){
+            StringUtil.copyPartialMatches(args[0], b, completions);
+        }else if (args.length == 2){
+            StringUtil.copyPartialMatches(args[1], b, completions);
+        }else if (args.length == 3) {
+            StringUtil.copyPartialMatches(args[2], b, completions);
+        }else if (args.length == 4){
+            StringUtil.copyPartialMatches(args[3], b, completions);
+        }
+        //kopiert sachen die matchen
+        Collections.sort(completions);
+        return completions;
     }
 }
