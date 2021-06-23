@@ -13,10 +13,7 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 public class Message implements CommandExecutor, TabCompleter {
 
@@ -194,6 +191,7 @@ public class Message implements CommandExecutor, TabCompleter {
         }else if (args.length == 3) {
             StringUtil.copyPartialMatches(args[2], b, completions);
         }
+        Collections.sort(completions);
         return completions;
     }
 }

@@ -6,11 +6,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
-public class MoneySystem implements CommandExecutor {
+public class MoneySystem implements CommandExecutor, TabCompleter {
     public static final String PREFIX = "§4§lMoney §r§7§o";
 
     @Override
@@ -149,4 +156,25 @@ public class MoneySystem implements CommandExecutor {
         file.saveConfig();
     }
 
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        List<String> completions = new ArrayList<>();
+        List<String> b = new ArrayList<>();
+        if (alias.equals("pay")){
+            if(args.length == 1){
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    b.add(p.getName());
+                }
+            }else if (args.length == 2){
+                b.add("<Menge>");
+            }
+        }
+        if (args.length == 1){
+            StringUtil.copyPartialMatches(args[0], b, completions);
+        }else if (args.length == 2){
+            StringUtil.copyPartialMatches(args[1], b, completions);
+        }
+        Collections.sort(completions);
+        return completions;
+    }
 }
