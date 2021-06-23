@@ -7,13 +7,15 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-public class Message implements CommandExecutor {
+public class Message implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -150,5 +152,46 @@ public class Message implements CommandExecutor {
     public static boolean hasMessages(String uuidOfPlayer){
         FileConfig messages = new FileConfig("MoneyInfo", "messages.yml");
         return messages.getStringList(uuidOfPlayer).size() >= 1;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        List<String> completions = new ArrayList<>();
+        List<String> b = new ArrayList<>();
+        if(args.length == 1) {
+            b.add("send");
+            b.add("get");
+            b.add("delete");
+        }
+        if (args.length == 2) {
+            switch (args[0].toLowerCase(Locale.ROOT)) {
+                case "send":
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        b.add(p.getName());
+                    }
+                    break;
+                case "delete":
+                    Player p = (Player) sender;
+                    FileConfig messages = new FileConfig("MoneyInfo", "messages.yml");
+                    List<String> n = messages.getStringList(p.getUniqueId().toString());
+                    for (int i = 0; i < n.size(); i++) {
+                        b.add(String.valueOf(i));
+                    }
+                    b.add("all");
+                    break;
+            }
+        }
+        if (args.length == 3 && args[0].toLowerCase(Locale.ROOT).equals("send")){
+            b.add("<Nachricht>");
+        }
+        if (args.length == 1){
+            StringUtil.copyPartialMatches(args[0], b, completions);
+        }else if (args.length == 2){
+            StringUtil.copyPartialMatches(args[1], b, completions);
+        }else if (args.length == 3) {
+            StringUtil.copyPartialMatches(args[2], b, completions);
+        }
+        Collections.sort(completions);
+        return completions;
     }
 }
