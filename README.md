@@ -7,4 +7,4 @@ The main idea of the plugin is to make a system to change money into items and i
 3. Everyone can make a Account with another player.
 4. The operator can use an /heal command.
 5. The operator can manage the Money of every person.
-6. The currency is $FP becaous of the name of the project for withch the plugin is made.
+6. The currency is $FP becous of the name of the project for withch the plugin is made.
