@@ -3,7 +3,7 @@ version: ${project.version}
 main: de.freddy.MoneySystem.Main
 api-version: 1.16
 authors: [ Freddy880 ]
-description: Ein Test plugin
+description: Ein Money Plugin
 
 commands:
   heal:
