@@ -21,7 +21,7 @@ public class HealCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if(player.hasPermission("de.freddy.tutorial.heal")){
+        if(player.hasPermission("de.freddy.MoneySystem.heal")){
             player.setHealth(20d);
             player.setFoodLevel(20);
             player.sendMessage(Main.PREFIX + "Du wurdest geheilt!");

@@ -17,8 +17,9 @@ public class PingCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
         if(args.length == 0){
-        player.sendMessage(Main.PREFIX + "§r§aDein Ping liegt bei §e" + player.getPing());
-        return true;
+            int ping = player.getPing();
+            player.sendMessage(Main.PREFIX + "§r§aDein Ping liegt bei §e" + ping);
+            return true;
         }else{
             Player otherplayer = Bukkit.getPlayer(args[0]);
             if(!(Bukkit.getOnlinePlayers().contains(otherplayer))){
