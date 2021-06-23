@@ -3,7 +3,6 @@ package de.freddy.MoneySystem.utils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class FileConfig extends YamlConfiguration {
@@ -15,16 +14,12 @@ public class FileConfig extends YamlConfiguration {
 
         try {
             load(this.path);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidConfigurationException e) {
+        } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
     }
 
-    public FileConfig(String filename){
+    public FileConfig(String filename) {
         this("LobbySystem", filename);
     }
     public void saveConfig() {

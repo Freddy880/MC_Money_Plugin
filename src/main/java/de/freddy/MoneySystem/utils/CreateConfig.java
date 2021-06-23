@@ -6,7 +6,6 @@ public class CreateConfig {
         INSTANCE = this;
     }
     public static void makeConfig(){
-
         FileConfig config = new FileConfig("MoneyInfo", "config.yml");
         config.set("PREFIX","§l§sFreddyPlugin§r§7§o ");
         config.set("Plugin geladen","Das Plugin von Freddy880 wurde geladen");

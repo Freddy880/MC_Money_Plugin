@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Objects;
 
 public final class Main extends JavaPlugin {
 
@@ -24,8 +25,8 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         this.register();
-        File config = new File("/MoneyInfo/config.yml");
-        if (!config.isFile()){
+        File file = new File("plugins/MoneyInfo/config.yml");
+        if (!file.exists()){
             CreateConfig.makeConfig();
         }
         log(config().getString("Plugin geladen"));
@@ -48,12 +49,12 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new SingEvents(), this);
 
         //Commands
-        Bukkit.getPluginCommand("heal").setExecutor(new HealCommand());
-        Bukkit.getPluginCommand("Spawn").setExecutor(new SpawnCommand());
-        Bukkit.getPluginCommand("money").setExecutor(new MoneySystem());
-        Bukkit.getPluginCommand("sendmoney").setExecutor(new moneyforCommandBlock());
-        Bukkit.getPluginCommand("konto").setExecutor(new KontoSystem());
-        Bukkit.getPluginCommand("ping").setExecutor(new PingCommand());
+        Objects.requireNonNull(Bukkit.getPluginCommand("heal")).setExecutor(new HealCommand());
+        Objects.requireNonNull(Bukkit.getPluginCommand("Spawn")).setExecutor(new SpawnCommand());
+        Objects.requireNonNull(Bukkit.getPluginCommand("money")).setExecutor(new MoneySystem());
+        Objects.requireNonNull(Bukkit.getPluginCommand("sendmoney")).setExecutor(new moneyforCommandBlock());
+        Objects.requireNonNull(Bukkit.getPluginCommand("konto")).setExecutor(new KontoSystem());
+        Objects.requireNonNull(Bukkit.getPluginCommand("ping")).setExecutor(new PingCommand());
     }
     public static FileConfig config() {
         return new FileConfig("MoneyInfo", "config.yml");
