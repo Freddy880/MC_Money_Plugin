@@ -61,7 +61,7 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                 String konto = args[1];
                 //exestiert Konto?
                 if (!konten.contains(path + konto)) {
-                    player.sendMessage(PREFIX + "Das Konto existiert nicht. Wenn es exestieren müsste bitte einen Admin " +
+                    player.sendMessage(PREFIX + "Das Konto existiert nicht. Wenn es existieren müsste bitte einen Admin " +
                             "kontaktieren");
                     return true;
                 }
@@ -70,15 +70,15 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                 List<String> berrechtigung = konten.getStringList(path + konto + ".zugriff");
                 //Kontostand hoch genug zum abheben?
                 if (menge > kontostand) {
-                    player.sendMessage(PREFIX + "Der Kontostand beträgt nur" + kontostand + "$FP. Abheben nicht möglich!");
+                    player.sendMessage(PREFIX + "Der Kontostand beträgt nur " + kontostand + "$FP. Abheben nicht möglich!");
                     return true;
                 } else if (!berrechtigung.contains(player.getUniqueId().toString())) {
-                    player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
+                    player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens: " + konto);
                     return true;
                 }
                 kontoRemoveMoney(konto, menge);
                 MoneySystem.addMoney(player.getUniqueId().toString(), menge);
-                player.sendMessage(PREFIX + "Das abheben von " + menge + "$FP war erfolgreich! Das konto hat noch " +
+                player.sendMessage(PREFIX + "Das abheben von " + menge + "$FP war erfolgreich! Das Konto hat noch ein Guthaben von " +
                         kontoGetMoney(konto) + "$FP.");
                 //Notification
                 if (!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
@@ -94,7 +94,7 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                     player.sendMessage(PREFIX + "Das Konto existiert nicht.");
                     return true;
                 } else if (MoneySystem.getMoney(player.getUniqueId().toString()) < ammount) {  //Wenn der Spieler nicht genug Geld hat
-                    player.sendMessage(PREFIX + "Du hast nicht genug Geld um das Konto aufzuladen. Dein Kontostand beträgt nur " +
+                    player.sendMessage(PREFIX + "Du hast nicht genug Geld, um das Konto aufzuladen. Dein Kontostand beträgt nur " +
                             MoneySystem.getMoney(player.getUniqueId().toString()) + "$FP");
                     return true;
                 } else
@@ -130,9 +130,6 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
 
             }
             case "transfer": {     //Überweisen an Konto als nicht Besitzer
-                //TODO Nachricht an Kontoinhaber, wenn er Online kommt
-                // evtl. auch Log wer wann was gemacht hat
-
                 String konto = args[1];
                 int amount = Integer.parseInt(args[2]);
                 if (MoneySystem.getMoney(player.getUniqueId().toString()) < amount) {

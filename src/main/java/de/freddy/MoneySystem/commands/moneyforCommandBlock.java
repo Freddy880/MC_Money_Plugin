@@ -22,8 +22,8 @@ public class moneyforCommandBlock implements CommandExecutor {
         FileConfig konten = new FileConfig("MoneyInfo", "money.yml");
         Player nearPlayer = null;
         if (sender instanceof Player) {
-            sender.sendMessage(MoneySystem.PREFIX + "Sorry, aber du hast keine Berechtigung für disen Command . Frage " +
-                    "einen Admin dir den entsprechenden Command Block zu plazieren.");
+            sender.sendMessage(MoneySystem.PREFIX + "Sorry, aber du hast keine Berechtigung für diesen Command! Frage " +
+                    "einen Admin dir den entsprechenden Command Block zu platzieren.");
             return false;
         }
         BlockCommandSender block = (BlockCommandSender) sender;
@@ -53,7 +53,7 @@ public class moneyforCommandBlock implements CommandExecutor {
                 }
                 MoneySystem.removeMoney(nearPlayer.getUniqueId().toString(), preis);
                 KontoSystem.kontoAddMoney(konto, preis);
-                nearPlayer.sendMessage(MoneySystem.PREFIX + "DU hast eine Dienstleistung in Anspruch genommen! Der Betrag" +
+                nearPlayer.sendMessage(MoneySystem.PREFIX + "Du hast eine Dienstleistung in Anspruch genommen! Der Betrag" +
                         "von " + preis + "$FP wurde an das Konto " + konto + " überwiesen. Bei fehlern wende dich an" +
                         "einen Admin");
                 return true;
