@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Tutorial</name>
+    <name>MoneyPlugin</name>
 
     <description>Ein Test plugin</description>
     <properties>
