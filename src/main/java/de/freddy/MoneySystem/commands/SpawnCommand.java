@@ -43,7 +43,7 @@ public class SpawnCommand implements CommandExecutor {
                 spawns.saveConfig();
                 player.sendMessage(Main.PREFIX + "Spawn gesetzt");
             }else{
-                player.sendMessage(Main.PREFIX + "Dir fehlt die Berrechtigung");
+                player.sendMessage(Main.PREFIX + "Dir fehlt die Berechtigung");
             }
             return true;
         }

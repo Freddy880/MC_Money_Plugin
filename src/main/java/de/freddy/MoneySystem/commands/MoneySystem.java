@@ -101,7 +101,7 @@ public class MoneySystem implements CommandExecutor, TabCompleter {
             }
             //Kontrolle ob spieler online
             if(Bukkit.getServer().getPlayer(args[1]) == null) {
-                sender.sendMessage(PREFIX + "Der Spieler ist nicht online. Der Command kann nicht druchgeführt werden.");
+                sender.sendMessage(PREFIX + "Der Spieler ist nicht online. Der Command kann nicht durchgeführt werden.");
                 return true;
 
             }
@@ -123,7 +123,7 @@ public class MoneySystem implements CommandExecutor, TabCompleter {
             }
             //Kontrolle ob spieler online
             if(Bukkit.getServer().getPlayer(args[1]) == null) {
-                sender.sendMessage(PREFIX + "Der Spieler ist nicht online. Der Command kann nicht druchgeführt werden.");
+                sender.sendMessage(PREFIX + "Der Spieler ist nicht online. Der Command kann nicht durchgeführt werden.");
                 return true;
 
             }
