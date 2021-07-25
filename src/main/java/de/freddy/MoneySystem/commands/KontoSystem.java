@@ -82,7 +82,7 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                         kontoGetMoney(konto) + "$FP.");
                 //Notification
                 if (!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
-                    Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$Fp" +
+                    Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$FP" +
                             " vom Konto " + konto + " abgehoben!"));
                 }
                 return true;
@@ -105,12 +105,12 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                     } else {
                         kontoAddMoney(konto, ammount);
                         MoneySystem.removeMoney(player.getUniqueId().toString(), ammount);
-                        player.sendMessage(PREFIX + "Das Aufladen des Kontos " + konto + " in höhe von " + ammount + "$FP" +
+                        player.sendMessage(PREFIX + "Das Aufladen des Kontos " + konto + " in Höhe von " + ammount + "$FP" +
                                 " war erfolgreich!");
                     }
                 //Notifivation
                 if (!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
-                    Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + ammount + ("$Fp" +
+                    Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + ammount + ("$FP" +
                             " dem " + konto + " hinzugefügt!"));
                 }
                 return true;
@@ -149,7 +149,7 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                             "war erfolgreich!");
                     //Notification
                     if (!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
-                        Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + amount + ("$Fp" +
+                        Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + amount + ("$FP" +
                                 " ans Konto " + konto + " überwiesen!"));
                     }
                     return true;
@@ -168,7 +168,7 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                     player.sendMessage(PREFIX + "Nur der Besitzer kann die Berechtigungen ändern!");
                     return true;
                 } else if (Bukkit.getPlayer(person) == null) {    //Wenn der Spieler nicht existiert
-                    player.sendMessage(PREFIX + "Der Spieler existiert nicht oder ist Offline.");
+                    player.sendMessage(PREFIX + "Der Spieler existiert nicht oder ist offline.");
                     return true;
                 } else if (zugriffe.contains(Objects.requireNonNull(Bukkit.getPlayer(person)).getUniqueId().toString())) {
                     player.sendMessage(PREFIX + "Es hat sich nichts geändert, da der Spieler schon die Erlaubnis hat.");
@@ -194,7 +194,7 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                     player.sendMessage(PREFIX + "Das Konto existiert nicht!");
                     return true;
                 } else if (Bukkit.getPlayer(person) == null) {    //Wenn der Spieler nicht existiert
-                    player.sendMessage(PREFIX + "Der Spieler existiert nicht oder ist Offline!");
+                    player.sendMessage(PREFIX + "Der Spieler existiert nicht oder ist offline!");
                     return true;
                 } else {
                     List<String> zugriffe;
@@ -233,13 +233,13 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                     //Durchführung
                     kontoRemoveMoney(konto, menge);
                     kontoAddMoney(konto1, menge);
-                    player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das konto hat noch " +
+                    player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das Konto hat noch " +
                             kontoGetMoney(konto) + "$FP.");
                     //Notifications
                     Message.sendNotification("Konto System", konten.getString(path + konto1 + ".besitzer"),
                             "Dir wurde " + menge + "$FP vom Konto " + konto + " an dein Konto " + konto1 + " überwiesen!");
                     if (!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
-                        Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$Fp" +
+                        Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$FP" +
                                 " von Konto " + konto + " ans Konto " + konto1 + " überwiesen!"));
                     }
 
@@ -258,7 +258,7 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                         player.sendMessage(PREFIX + "Das Konto existiert nicht!");
                         return true;
                     } else if (konten.getInt(path + konto + ".kontostand") < menge) {  //Wenn der Kontostand zu gering ist
-                        player.sendMessage(PREFIX + "Das konto hat nicht genug Geld.");
+                        player.sendMessage(PREFIX + "Das Konto hat nicht genug Geld.");
                         return true;
                     } else if (!berechtigung.contains(player.getUniqueId().toString())) {   //wenn keine Berechtigung
                         player.sendMessage(PREFIX + "Du hast keine Berechtigung für das Konto namens:" + konto);
@@ -266,13 +266,13 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                     } else {
                         MoneySystem.addMoney(spieler1.getUniqueId().toString(), menge);
                         kontoRemoveMoney(konto, menge);
-                        player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das konto hat noch " +
+                        player.sendMessage(PREFIX + "Das versenden von " + menge + "$FP war erfolgreich! Das Konto hat noch " +
                                 kontoGetMoney(konto) + "$FP.");
                         //Notifications
                         Message.sendNotification("Konto System", spieler1.getUniqueId().toString(), "Dir " +
                                 "wurden " + menge + "$FP vom Konto " + konto + "gegeben.");
                         if (!player.getUniqueId().toString().equals(konten.getString(path + konto + ".besitzer"))) {
-                            Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$Fp" +
+                            Message.sendNotification("Konto System", konten.getString(path + konto + ".besitzer"), player.getName() + " hat " + menge + ("$FP" +
                                     " von Konto " + konto + " an den Spieler " + spieler1.getName() + " überwiesen!"));
                         }
                         return true;
@@ -292,12 +292,12 @@ public class KontoSystem implements CommandExecutor, TabCompleter {
                     return true;
                 } else {
                     konten.set(path + konto, null);
-                    player.sendMessage(PREFIX + "Das löschen des Kontos war erfolgreich.");
+                    player.sendMessage(PREFIX + "Das Löschen des Kontos war erfolgreich.");
                 }
                 return true;
             }
             default: {   //FEHLER------------------------------------------------------------------------------------------------
-                player.sendMessage(PREFIX + "Command falsch genutzt gebe /MoneyPlugin help ein!");
+                player.sendMessage(PREFIX + "Command falsch genutzt. Gebe /MoneyPlugin help ein!");
                 break;
             }
         }

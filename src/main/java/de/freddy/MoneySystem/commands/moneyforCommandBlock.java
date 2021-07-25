@@ -22,8 +22,8 @@ public class moneyforCommandBlock implements CommandExecutor {
         FileConfig konten = new FileConfig("MoneyInfo", "money.yml");
         Player nearPlayer = null;
         if (sender instanceof Player) {
-            sender.sendMessage(MoneySystem.PREFIX + "Sorry, aber du hast keine Berechtigung für disen Command . Frage " +
-                    "einen Admin dir den entsprechenden Command Block zu plazieren.");
+            sender.sendMessage(MoneySystem.PREFIX + "Sorry, aber du hast keine Berechtigung für diesen Command . Frage " +
+                    "einen Admin dir den entsprechenden Commandblock zu platzieren.");
             return false;
         }
         BlockCommandSender block = (BlockCommandSender) sender;
@@ -38,7 +38,7 @@ public class moneyforCommandBlock implements CommandExecutor {
                 nearPlayer = (Player) entity;
                 if (near.size() == 0 || MoneySystem.getMoney(Objects.requireNonNull(nearPlayer).getUniqueId().toString()) < preis || !konten.contains("konten." + konto)) {
                     nearPlayer.sendMessage(MoneySystem.PREFIX + "Du hast nicht genug Geld um die Dienstleistung in Anspruch" +
-                            "zu nehmen. Oder Das konto Existiert nicht");
+                            "zu nehmen oder das Konto existiert nicht");
                     final Block commandBlock = ((BlockCommandSender) sender).getBlock();
                     final int bx = commandBlock.getX();
                     final int by = commandBlock.getY();
@@ -53,8 +53,8 @@ public class moneyforCommandBlock implements CommandExecutor {
                 }
                 MoneySystem.removeMoney(nearPlayer.getUniqueId().toString(), preis);
                 KontoSystem.kontoAddMoney(konto, preis);
-                nearPlayer.sendMessage(MoneySystem.PREFIX + "DU hast eine Dienstleistung in Anspruch genommen! Der Betrag" +
-                        "von " + preis + "$FP wurde an das Konto " + konto + " überwiesen. Bei fehlern wende dich an" +
+                nearPlayer.sendMessage(MoneySystem.PREFIX + "Du hast eine Dienstleistung in Anspruch genommen! Der Betrag" +
+                        "von " + preis + "$FP wurde an das Konto " + konto + " überwiesen. Bei Fehlern wende dich an" +
                         "einen Admin");
                 return true;
             }
