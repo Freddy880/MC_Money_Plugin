@@ -54,7 +54,7 @@ public class MoneySystem implements CommandExecutor, TabCompleter {
 
         }else if(args[0].equalsIgnoreCase("set")) {     //Setzen von geld
             if (!sender.hasPermission("de.freddy.moneyAdmin")) {    //Permission
-                sender.sendMessage(PREFIX + "Sorry, du hast keine Erlaubnis diesen command durchzuführen");
+                sender.sendMessage(PREFIX + "Sorry, du hast keine Erlaubnis diesen Command durchzuführen");
                 return true;
 
             }
@@ -69,7 +69,7 @@ public class MoneySystem implements CommandExecutor, TabCompleter {
             int money = Integer.parseInt(args[2]);
 
             if (target == null) {           //Kontolle ob spieler exestiert
-                sender.sendMessage(PREFIX + "Der spieler existiert nicht.");
+                sender.sendMessage(PREFIX + "Der Spieler existiert nicht.");
                 return true;
             }
             setMoney(target, money);
@@ -91,7 +91,7 @@ public class MoneySystem implements CommandExecutor, TabCompleter {
             int money = Integer.parseInt(args[2]);
 
             if (target == null) {           //Kontolle ob spieler exestiert
-                sender.sendMessage(PREFIX + "Der spieler existiert nicht.");
+                sender.sendMessage(PREFIX + "Der Spieler existiert nicht.");
                 return true;
             }
             removeMoney(target, money);
@@ -113,7 +113,7 @@ public class MoneySystem implements CommandExecutor, TabCompleter {
             int money = Integer.parseInt(args[2]);
 
             if (target == null) {           //Kontolle ob spieler exestiert
-                sender.sendMessage(PREFIX + "Der spieler existiert nicht.");
+                sender.sendMessage(PREFIX + "Der Spieler existiert nicht.");
                 return true;
             }
             addMoney(target, money);

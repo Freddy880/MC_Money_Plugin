@@ -24,7 +24,7 @@ public class Message implements CommandExecutor, TabCompleter {
         switch (args[0]){
             case "send": {
                 if (args.length < 3) {   //Genug Argumente
-                    player.sendMessage(Main.PREFIX + "Zu Wenige oder zu viele Argumente!");
+                    player.sendMessage(Main.PREFIX + "Zu wenige oder zu viele Argumente!");
                     return true;
                 }
                 OfflinePlayer empfaenger = Bukkit.getOfflinePlayer(args[1]);
@@ -41,7 +41,7 @@ public class Message implements CommandExecutor, TabCompleter {
                     mess.append(" ");
                 }
                 sendNotification(player.getName(), empfaenger.getUniqueId().toString(), mess.toString());
-                player.sendMessage(Main.PREFIX + "Das versenden war erfolgreich!");
+                player.sendMessage(Main.PREFIX + "Das Versenden war erfolgreich!");
                 return true;
             }
 
@@ -75,7 +75,7 @@ public class Message implements CommandExecutor, TabCompleter {
             }
 
             default: {
-                player.sendMessage(Main.PREFIX + "Falscher nutzen des Commands gebe help ein!");
+                player.sendMessage(Main.PREFIX + "Falsches Nutzen des Commands gebe help ein!");
                 return true;
             }
         }
@@ -139,13 +139,13 @@ public class Message implements CommandExecutor, TabCompleter {
             return;
         }
         String[] m = infos.split(":");
-        player.sendMessage("Nachrricht von: " + m[0]);
+        player.sendMessage("Nachricht von: " + m[0]);
         for (int b = 1; b < m.length; b++) {
             player.sendMessage(m[b]);
         }
     }
     /**
-     * Kontrolliet ob ein Spieler nachrichten hat
+     * Kontrolliert ob ein Spieler Nachrichten hat
      * @param uuidOfPlayer UUID des Speilers in String
      * @return boolean
      */

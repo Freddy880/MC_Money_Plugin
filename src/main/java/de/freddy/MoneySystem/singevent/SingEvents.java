@@ -34,7 +34,7 @@ public class SingEvents implements Listener {
                 prices.set(path + ".itemid", "ITEMID");
                 prices.set(path + ".menge", 1);
                 prices.saveConfig();
-                e.getPlayer().sendMessage(MoneySystem.PREFIX + "In der Config \"prices.yml\" wurde ein neuer Pfad Hinzugefügt. Hier bitte die Konfiguration übernehmen.");
+                e.getPlayer().sendMessage(MoneySystem.PREFIX + "In der Config \"prices.yml\" wurde ein neuer Pfad hinzugefügt. Hier bitte die Konfiguration übernehmen.");
             }
             e.setLine(1,"Item: " + e.getLine(1));
             e.setLine(2,"Preis: " + prices.getString(path + ".preis") + "$");
@@ -49,7 +49,7 @@ public class SingEvents implements Listener {
                 prices.set(path + ".itemid", "ITEMID");
                 prices.set(path + ".menge", 1);
                 prices.saveConfig();
-                e.getPlayer().sendMessage(MoneySystem.PREFIX + "In der Config \"prices.yml\" wurde ein neuer Pfad Hinzugefügt. Hier bitte die Konfiguration übernehmen.");
+                e.getPlayer().sendMessage(MoneySystem.PREFIX + "In der Config \"prices.yml\" wurde ein neuer Pfad hinzugefügt. Hier bitte die Konfiguration übernehmen.");
             }
             //Setzen der Texte
             e.setLine(1,"Item: " + e.getLine(1));
@@ -57,7 +57,7 @@ public class SingEvents implements Listener {
         }
     }
     @EventHandler
-    //Wenn Spieler mit schilder Interagiert
+    //Wenn Spieler mit Schildern interagiert
     public void onPlayerInteractWithSing(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK){
@@ -80,7 +80,7 @@ public class SingEvents implements Listener {
                     }
                     //Item den Spieler geben
                     if (amount + p.getInventory().getItemInHand().getAmount()> 64) { //Test ob genug platz in Hand
-                        p.sendMessage(MoneySystem.PREFIX + "Deine Hand hat keinen Platz, für alle Items, die gekauft werden sollen.");
+                        p.sendMessage(MoneySystem.PREFIX + "Deine Hand hat keinen Platz für alle Items die gekauft werden sollen.");
                         return;
                     }
                     if (!(p.getInventory().getItemInHand().getType() == material || p.getInventory().getItemInHand().getType().isAir())) {  //Test ob die Hand frei ist bzw. gleiche Item
@@ -91,14 +91,14 @@ public class SingEvents implements Listener {
                     if (MoneySystem.getMoney(p.getUniqueId().toString()) >= preis) {
                         MoneySystem.removeMoney(p.getUniqueId().toString(), preis);
                         p.getInventory().addItem(new ItemStack(material, amount));
-                        p.sendMessage(MoneySystem.PREFIX + "Der Kauf von \"" + item + "\"in höhe von "
+                        p.sendMessage(MoneySystem.PREFIX + "Der Kauf von \"" + item + "\"in Höhe von "
                                 + preis + "$ war erfolgreich.");
                     } else {
-                        p.sendMessage(MoneySystem.PREFIX + "Du hast nicht genug geld für den Kauf. Dein Kontostand " +
+                        p.sendMessage(MoneySystem.PREFIX + "Du hast nicht genug Geld für den Kauf. Dein Kontostand " +
                                 "beträgt nur " + MoneySystem.getMoney(p.getUniqueId().toString()) + "$");
                     }
                 }else if (sign.getLine(0).equalsIgnoreCase("§a§l[Sell]")) {
-                    //TODO: Make this Controll if item in inventory price usw.
+                    //TODO: Make this control if item in inventory price usw.
                     //Item bekommen + Anzahl + Pfad in der yml. Datei
                     String[] line1 = sign.getLine(1).split(" ");
                     String path = "verkauf." + line1[1];
@@ -107,9 +107,9 @@ public class SingEvents implements Listener {
                     int preis = prices.getInt(path + ".preis");
                     //Testet, ob das Item in der Hand des spielers ist
                     if(p.getItemInHand().getType() != item) {
-                        p.sendMessage(MoneySystem.PREFIX + "Du hast das Entsprechende Item nicht in der Hand!");
+                        p.sendMessage(MoneySystem.PREFIX + "Du hast das entsprechende Item nicht in der Hand!");
                     }else if(!(p.getItemInHand().getAmount() >= amount)){       //Testet, ob der Spieler genug von dem Item hat.
-                        p.sendMessage(MoneySystem.PREFIX + "Du hast die Entsprechende Menge des Items in der Hand!");
+                        p.sendMessage(MoneySystem.PREFIX + "Du hast die entsprechende Menge des Items in der Hand!");
                     }else if(item == null){
                         p.sendMessage(MoneySystem.PREFIX + "Ups... Anscheinend ist etwas falsch gelaufen. Bitte gebe " +
                                 "folgenden Error an die Admins: material == null -> zugewiesene ID in Config falsch ");
